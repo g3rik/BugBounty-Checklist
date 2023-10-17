@@ -26,8 +26,6 @@ def checklist_detail(request, website_id):
             grouped_checklists[topic] = [point]
         else:
             grouped_checklists[topic].append(point)
-
-    print (grouped_checklists)
     
     return render(request, 'checklist_detail.html', {'website': website, 'grouped_checklists': grouped_checklists})
 
