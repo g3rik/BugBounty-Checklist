@@ -1,0 +1,27 @@
+{% extends 'index.html' %}
+{% block title %}Target List{% endblock %}
+
+{% block content %}
+
+<ul class="list-group">
+    {% for website in websites %}
+        <!-- <li class="list-group-item list-group-item-action list-group-item-secondary"> -->
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="{% url 'checklist_detail' website.id %}" class="list-group-item list-group-item-action list-group-item-secondary d-flex justify-content-between">
+                    <b>{{ website.name }}</b>
+                    <span class="text-dark"><b>{{ website.url }}</b></span>
+                </a>
+                
+            </div>
+        <!-- </li> -->
+    {% empty %}
+        <li class="list-group-item">
+            <p class="text-muted">No websites available.</p>
+        </li>
+    {% endfor %}
+    <!-- <a href="/checklist/add_target/"><button type="button" class="btn btn-outline-info float-right mt-3">Add target</button></a> -->
+    <a href="/checklist/add_target/" class="btn btn-outline-info float-right mt-3 w-25">Add target</a>
+    
+</ul>
+
+{% endblock %}

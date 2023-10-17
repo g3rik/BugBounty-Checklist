@@ -1,0 +1,48 @@
+{% extends 'index.html' %}
+{% block title %}Target List{% endblock %}
+
+{% block content %}
+
+<h1>Add a New Website</h1>
+        
+            <label for="name" class="text-light my-3">Website Name:</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+            <div class="invalid-feedback">
+                Please enter a website name.
+            </div>
+        
+       
+            <label for="url" class="text-light my-3">Website URL:</label>
+            <input type="url" class="form-control" id="url" name="url" required>
+            <div class="invalid-feedback">
+                Please enter a valid website URL.
+            </div>
+        
+        <button type="submit" class="btn btn-outline-info mt-3" id="submit">Add Website</button>
+
+
+<script>
+    $(document).ready(function() {
+        $("#submit").click(function() {
+            var name = $("#name").val();
+            var url = $("#url").val();
+            $.ajax({
+                type: "POST",
+                url: "/checklist/add_target/",
+                data: {
+                    'name': name,
+                    'url': url,
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                },
+                success: function(response) {
+                    window.location.href = "/checklist/websites/";
+                },
+                error: function(response) {
+                    alert("Error");
+                }
+            });
+        })
+    })
+</script>
+
+{% endblock %}

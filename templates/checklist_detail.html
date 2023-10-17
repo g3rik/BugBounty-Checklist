@@ -1,0 +1,71 @@
+{% extends 'index.html' %}
+{% block title %}{{ website.name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <a href="/checklist/websites/"><button type="button" class="btn btn-outline-info float-right">All targets</button></a>
+        <h1 class="my-2 text-light" id="{{ website.id }}">Checklists for {{ website.name }}</h1>
+        <ul class="list-group">
+
+            {% for topic,subtopic in grouped_checklists.items %}
+                <ul class="list-group">
+                    <h4 class="my-2 text-light">
+                        {{ topic.title }}
+                    </h4>
+                {% for point in subtopic %}
+                <li class="list-group-item {% if point.output and not point.output.isspace %} bg-success text-light{% endif %}" >
+                    <div class="container">
+                        <h5 class="mb-0" data-bs-toggle="collapse" data-bs-target="#collapse-{{ point.checkpoint.id }}">
+                            {{ point.checkpoint.title }}
+                        </h5>
+                        <div id="collapse-{{ point.checkpoint.id }}" class="collapse">
+                            {% if point.checkpoint.payload %}
+                            <p><strong>Payload:</strong><code> {{ point.checkpoint.payload }}</code></p>
+                            {% endif %}
+                            <p><strong>Output:</strong><textarea name="output" style="height: 100px;" class="form-control checklist-output" data-point-id="{{ point.id }}">{{ point.output }}</textarea></p>
+                        </div>
+                    </div>
+                </li>
+            {% empty %}
+                <li class="list-group-item">
+                    <p class="text-muted">No checklist points available for this checklist.</p>
+                </li>
+            {% endfor %}
+        </ul>
+        {% endfor %}
+    </div>
+</div>
+
+
+<script>
+$(document).ready(function() {
+    $('.checklist-output').on('input', function() {
+        var textarea = $(this);
+        var pointId = textarea.data('point-id');
+        var updatedOutput = textarea.val();
+        // debugger;
+        $.ajax({
+            type: "POST",
+            url: "/checklist/update_checklist_data/",
+            data: {
+                'point_id': pointId,
+                'output': updatedOutput,
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+            },
+            success: function(response) {
+                // console.log(textarea);
+                // debugger;
+               
+            },
+            error: function(response) {
+                alert("Error");
+            }
+        });
+    });
+});
+
+</script>
+
+
+{% endblock %}
